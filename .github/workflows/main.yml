@@ -22,12 +22,15 @@ jobs:
       with:
         channel: 'stable'
 
+    # اب یہ طریقہ پاسورڈ کے اسپیشل کیریکٹرز کو بالکل محفوظ رکھے گا
     - name: Create key.properties
       run: |
-        echo "storePassword=${{ secrets.STORE_PASSWORD }}" > android/key.properties
-        echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
-        echo "keyAlias=upload" >> android/key.properties
-        echo "storeFile=upload-keystore.jks" >> android/key.properties
+        cat << 'SECRET_EOF' > android/key.properties
+        storePassword=${{ secrets.STORE_PASSWORD }}
+        keyPassword=${{ secrets.KEY_PASSWORD }}
+        keyAlias=upload
+        storeFile=upload-keystore.jks
+        SECRET_EOF
 
     - name: Install dependencies
       run: flutter pub get
@@ -35,7 +38,6 @@ jobs:
     - name: Build AAB
       run: flutter build appbundle --release
 
-    # یہاں اب بالکل نیا ورژن v4 استعمال ہو رہا ہے جو گٹ ہب مانگ رہا ہے
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
       with:

@@ -25,8 +25,8 @@ configure<com.android.build.api.dsl.ApplicationExtension> {
 
     defaultConfig {
         applicationId = "com.example.prayer_times_app"
-        minSdk = 23
-        targetSdk = 36
+        minSdk = flutter.minSdkVersion
+        targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
@@ -49,10 +49,10 @@ configure<com.android.build.api.dsl.ApplicationExtension> {
     }
 }
 
-// Kotlin Setup (اب یہ اینڈرائیڈ بلاک سے باہر ہے تاکہ ایرر نہ آئے)
+// Kotlin Setup
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = "1.8"
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
     }
 }
 

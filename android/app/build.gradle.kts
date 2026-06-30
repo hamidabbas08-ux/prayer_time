@@ -42,6 +42,13 @@ android {
     }
 }
 
+// 🌟 دونوں کمپائلرز کا ورژن 1.8 پر برابر لاک کرنے کے لیے
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
+    }
+}
+
 flutter {
     source = "../.."
 }

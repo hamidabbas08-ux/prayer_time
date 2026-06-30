@@ -22,21 +22,14 @@ jobs:
       with:
         channel: 'stable'
 
-    # 🌟 یہ ہے وہ ٹرک: پاسورڈ کو انوائرمنٹ (env) کے ذریعے پاس کرنا
-    - name: Create key.properties
-      env:
-        SECRET_STORE_PASS: ${{ secrets.STORE_PASSWORD }}
-        SECRET_KEY_PASS: ${{ secrets.KEY_PASSWORD }}
-      run: |
-        echo "storePassword=$SECRET_STORE_PASS" > android/key.properties
-        echo "keyPassword=$SECRET_KEY_PASS" >> android/key.properties
-        echo "keyAlias=upload" >> android/key.properties
-        echo "storeFile=upload-keystore.jks" >> android/key.properties
-
     - name: Install dependencies
       run: flutter pub get
 
+    # 🌟 یہاں پاسورڈ بغیر کسی فائل کے سیدھے گریڈل بلڈ کو مل جائیں گے
     - name: Build AAB
+      env:
+        STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: flutter build appbundle --release
 
     - name: Upload Build Artifact

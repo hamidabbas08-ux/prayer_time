@@ -34,7 +34,7 @@ configure<com.android.build.api.dsl.ApplicationExtension> {
     signingConfigs {
         create("release") {
             keyAlias = "upload"
-            keyPassword = keystoreProperties.getProperty("storePassword")
+            keyPassword = keystoreProperties.getProperty("keyPassword")
             storeFile = file("upload-keystore.jks")
             storePassword = keystoreProperties.getProperty("storePassword")
         }

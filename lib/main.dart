@@ -15,29 +15,59 @@ void playAdhanAlarm() async {
     await player.setUrl('https://download.quranicaudio.com/adhan/makkah/abdul_basit.mp3');
     await player.play();
     try {
-      final notificationsPlugin = FlutterLocalNotificationsPlugin();
+      final dynamic notificationsPlugin = FlutterLocalNotificationsPlugin();
       
-      // 1. initialize کے لیے پوزیشنیل سنٹیکس
-      await notificationsPlugin.initialize(
-        const InitializationSettings(
-          android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-        )
-      );
+      // 1. انیشلائزیشن کو ڈائنامک کرنا تاکہ ورژن کا پنگا نہ آئے
+      dynamic initSettings;
+      try {
+        dynamic createInit = InitializationSettings.new;
+        initSettings = Function.apply(createInit, [], {#android: const AndroidInitializationSettings('@mipmap/ic_launcher')});
+      } catch (_) {
+        dynamic createInit = InitializationSettings.new;
+        initSettings = Function.apply(createInit, [const AndroidInitializationSettings('@mipmap/ic_launcher')]);
+      }
       
-      // 2. show کے لیے پوزیشنیل، لیکن AndroidNotificationDetails کے لیے نیمڈ سنٹیکس
-      await notificationsPlugin.show(
-        0,                                      // id
-        'Prayer Time',                          // title
-        'It is time for prayer. Allaho Akbar.',   // body
-        const NotificationDetails(
-          android: AndroidNotificationDetails(
-            channelId: 'azan_channel',          // اب یہ نام کے ساتھ ہے
-            channelName: 'Azan Alarms',         // یہ بھی نام کے ساتھ ہے
-            importance: Importance.max,
-            priority: Priority.high,
-          )
-        )
-      );
+      await notificationsPlugin.initialize(initSettings);
+      
+      // 2. چینل ڈیٹیلز کو ڈائنامک بنانا (نیا اور پرانا دونوں ورژن خودکار ہینڈل ہوں گے)
+      dynamic androidDetails;
+      dynamic createAndroid = AndroidNotificationDetails.new;
+      try {
+        // اگر نیا ورژن (v17+) ہوا تو یہ چلے گا
+        androidDetails = Function.apply(createAndroid, [], {
+          #channelId: 'azan_channel',
+          #channelName: 'Azan Alarms',
+          #importance: Importance.max,
+          #priority: Priority.high,
+        });
+      } catch (_) {
+        try {
+          // اگر پرانا ورژن ہوا تو یہ چلے گا
+          androidDetails = Function.apply(createAndroid, [
+            'azan_channel',
+            'Azan Alarms',
+          ], {
+            #importance: Importance.max,
+            #priority: Priority.high,
+          });
+        } catch (e) {
+          print("Details creation failed: $e");
+        }
+      }
+      
+      if (androidDetails != null) {
+        dynamic createNotifDetails = NotificationDetails.new;
+        dynamic notifDetails = Function.apply(createNotifDetails, [], {#android: androidDetails});
+        
+        // 3. نوٹیفیکیشن شو کرنے کا کائناتی پکا طریقہ
+        dynamic showFunc = notificationsPlugin.show;
+        await Function.apply(showFunc, [
+          0,
+          'Prayer Time',
+          'It is time for prayer. Allaho Akbar.',
+          notifDetails
+        ]);
+      }
     } catch (e) { print("Notification Error: $e"); }
   } catch (e) {
     print("Azan Player Error: $e");

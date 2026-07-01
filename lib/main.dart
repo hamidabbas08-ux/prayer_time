@@ -92,7 +92,7 @@ class PrayerTimesApp extends StatelessWidget {
         brightness: Brightness.light,
         primaryColor: const Color(0xFF007AFF),
         scaffoldBackgroundColor: Colors.white,
-        cardColor: Colors.white,
+        cardColor: const Color(0xFF1E1E1E),
       ),
       home: const HomeScreen(),
     );
@@ -234,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 20),
               Text(
                 _cityName,
-                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: Colors.black),
+                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: Colors.white),
               ),
               const SizedBox(height: 5),
               const Text("Your Live GPS Location", style: TextStyle(color: Colors.grey, fontSize: 14)),
@@ -282,9 +282,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ElevatedButton.icon(
                   onPressed: _isLoading ? null : _determinePosition,
                   icon: _isLoading 
-                      ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black))
-                      : const Icon(Icons.gps_fixed, color: Colors.black),
-                  label: Text(_isLoading ? "لوکیشن مل رہی ہے..." : "Refresh Location", style: const TextStyle(fontSize: 16, color: Colors.black)),
+                      ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                      : const Icon(Icons.gps_fixed, color: Colors.white),
+                  label: Text(_isLoading ? "لوکیشن مل رہی ہے..." : "Refresh Location", style: const TextStyle(fontSize: 16, color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF007AFF),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -313,7 +313,7 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(name, style: TextStyle(fontSize: 18, fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal, color: isCurrent ? const Color(0xFF007AFF) : Colors.black)),
-          Text(time, style: TextStyle(fontSize: 18, fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal, color: Colors.black)),
+          Text(time, style: TextStyle(fontSize: 18, fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal, color: Colors.white)),
         ],
       ),
     );

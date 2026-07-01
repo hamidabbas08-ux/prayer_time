@@ -255,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onChanged: (value) {
                 setState(() {
                   currentFiqh = value!;
-                  _refreshPrayerTimes();
+                  
                 });
               },
             ),
@@ -273,7 +273,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onChanged: (value) {
                 setState(() {
                   currentFiqh = value!;
-                  _refreshPrayerTimes();
+                  
                 });
               },
             ),
@@ -353,8 +353,8 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(name, style: TextStyle(fontSize: 18, fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal, color: Colors.white, fontWeight: FontWeight.bold)),
-          Text(time, style: TextStyle(fontSize: 18, fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal, color: Colors.black, fontWeight: FontWeight.bold)),
+          Text(name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+          Text(time, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
         ],
       ),
     );

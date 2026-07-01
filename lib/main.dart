@@ -12,67 +12,51 @@ String currentFiqh = 'shafi';
 
 @pragma('vm:entry-point')
 void playAdhanAlarm() async {
+  // 1. Show Notification First (Guaranteed to fire independently)
+  try {
+    final dynamic notificationsPlugin = FlutterLocalNotificationsPlugin();
+    dynamic initSettings;
+    try {
+      dynamic createInit = InitializationSettings.new;
+      initSettings = Function.apply(createInit, [], {#android: const AndroidInitializationSettings('@mipmap/ic_launcher')});
+    } catch (_) {}
+    await notificationsPlugin.initialize(initSettings);
+    
+    dynamic androidDetails;
+    dynamic createAndroid = AndroidNotificationDetails.new;
+    try {
+      androidDetails = Function.apply(createAndroid, [], {
+        #channelId: 'azan_channel',
+        #channelName: 'Azan Alarms',
+        #importance: Importance.max,
+        #priority: Priority.high,
+      });
+    } catch (_) {}
+    
+    if (androidDetails != null) {
+      dynamic createNotifDetails = NotificationDetails.new;
+      dynamic notifDetails = Function.apply(createNotifDetails, [], {#android: androidDetails});
+      dynamic showFunc = notificationsPlugin.show;
+      await Function.apply(showFunc, [
+        0,
+        'Prayer Time',
+        'It is time for prayer. Allaho Akbar.',
+        notifDetails
+      ]);
+    }
+  } catch (e) {
+    print("Notification Background Error: $e");
+  }
+
+  // 2. Play Adhan Audio and keep isolate alive
   final player = AudioPlayer();
   try {
     await player.setUrl('https://download.quranicaudio.com/adhan/makkah/abdul_basit.mp3');
     await player.play();
-    try {
-      final dynamic notificationsPlugin = FlutterLocalNotificationsPlugin();
-      
-      // 1. انیشلائزیشن کو ڈائنامک کرنا تاکہ ورژن کا پنگا نہ آئے
-      dynamic initSettings;
-      try {
-        dynamic createInit = InitializationSettings.new;
-        initSettings = Function.apply(createInit, [], {#android: const AndroidInitializationSettings('@mipmap/ic_launcher')});
-      } catch (_) {
-        dynamic createInit = InitializationSettings.new;
-        initSettings = Function.apply(createInit, [const AndroidInitializationSettings('@mipmap/ic_launcher')]);
-      }
-      
-      await notificationsPlugin.initialize(initSettings);
-      
-      // 2. چینل ڈیٹیلز کو ڈائنامک بنانا (نیا اور پرانا دونوں ورژن خودکار ہینڈل ہوں گے)
-      dynamic androidDetails;
-      dynamic createAndroid = AndroidNotificationDetails.new;
-      try {
-        // اگر نیا ورژن (v17+) ہوا تو یہ چلے گا
-        androidDetails = Function.apply(createAndroid, [], {
-          #channelId: 'azan_channel',
-          #channelName: 'Azan Alarms',
-          #importance: Importance.max,
-          #priority: Priority.high,
-        });
-      } catch (_) {
-        try {
-          // اگر پرانا ورژن ہوا تو یہ چلے گا
-          androidDetails = Function.apply(createAndroid, [
-            'azan_channel',
-            'Azan Alarms',
-          ], {
-            #importance: Importance.max,
-            #priority: Priority.high,
-          });
-        } catch (e) {
-          print("Details creation failed: $e");
-        }
-      }
-      
-      if (androidDetails != null) {
-        dynamic createNotifDetails = NotificationDetails.new;
-        dynamic notifDetails = Function.apply(createNotifDetails, [], {#android: androidDetails});
-        
-        // 3. نوٹیفیکیشن شو کرنے کا کائناتی پکا طریقہ
-        dynamic showFunc = notificationsPlugin.show;
-        await Function.apply(showFunc, [
-          0,
-          'Prayer Time',
-          'It is time for prayer. Allaho Akbar.',
-          notifDetails
-        ]);
-      }
-    } catch (e) { print("Notification Error: $e"); }
+    // Keep background process alive for 3 minutes to allow complete Adhan playback
+    await Future.delayed(const Duration(minutes: 3));
   } catch (e) {
-    print("Azan Player Error: $e");
+    print("Azan Player Background Error: $e");
   }
 }
 

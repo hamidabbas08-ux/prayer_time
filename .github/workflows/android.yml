@@ -25,28 +25,23 @@ jobs:
     - name: Install Dependencies
       run: flutter pub get
 
-    # 1. ٹیسٹنگ والی APK بنانا (یہ پاس ہو جاتی ہے)
+    # 1. ٹیسٹنگ APK بلڈ کرنا
     - name: Build APK for Local Testing
       run: flutter build apk --debug
 
-    # جادوئی تبدیلی: اے پی کے بنتے ہی فوراً اپلوڈ کر دیں تاکہ تالا محفوظ ہو جائے!
-    - name: Upload Testing APK to GitHub Artifacts
+    # 2. ٹیسٹنگ AAB (App Bundle) بلڈ کرنا
+    - name: Build App Bundle (AAB) for Testing
+      run: flutter build appbundle --debug
+
+    # 3. دونوں فائلوں کو ایک ساتھ گٹ ہب آرٹیکفٹس میں اپلوڈ کرنا
+    - name: Upload Testing APK
       uses: actions/upload-artifact@v4
       with:
         name: PrayerTime-Testing-APK
         path: build/app/outputs/flutter-apk/app-debug.apk
 
-    # 2. پلے اسٹور کے لیے فائنل AAB بنانا (اگر یہ فیل بھی ہو تو پرواہ نہیں)
-    - name: Build App Bundle (AAB)
-      run: flutter build appbundle --release
-      env:
-        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-        STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-
-    - name: Upload App Bundle to GitHub Artifacts
+    - name: Upload Testing AAB
       uses: actions/upload-artifact@v4
       with:
-        name: PrayerTime-PlayStore-AAB
-        path: build/app/outputs/bundle/release/app-release.aab
+        name: PrayerTime-Testing-AAB
+        path: build/app/outputs/bundle/debug/app-debug.aab

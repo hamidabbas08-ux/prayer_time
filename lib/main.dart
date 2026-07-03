@@ -51,7 +51,7 @@ void playAdhanAlarm() async {
   // 2. Play Adhan Audio and keep isolate alive
   final player = AudioPlayer();
   try {
-    await player.setUrl('https://download.quranicaudio.com/adhan/makkah/abdul_basit.mp3');
+    await player.setAsset('assets/azan.mp3');
     await player.play();
     // Keep background process alive for 3 minutes to allow complete Adhan playback
     await Future.delayed(const Duration(minutes: 3));

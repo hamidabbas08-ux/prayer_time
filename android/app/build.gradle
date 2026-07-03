@@ -9,6 +9,8 @@ android {
     compileSdkVersion flutter.compileSdkVersion
 
     compileOptions {
+        // یہ لائنیں ایرر ختم کریں گی
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -17,24 +19,18 @@ android {
         jvmTarget = '1.8'
     }
 
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
-
     defaultConfig {
         applicationId "com.hamid.prayer_time"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutter.versionCode
         versionName flutter.versionName
+        multiDexEnabled true
     }
 
     signingConfigs {
         release {
-            // آپ کی لوکل جے کے ایس فائل کا حوالہ جو فولڈر میں موجود ہے
             storeFile file("upload-keystore.jks")
-            
-            // گٹ ہب کے ایکشن سیکریٹس سے ڈائریکٹ پاسورڈز کھینچنا
             storePassword System.getenv("STOR_PASSWORD")
             keyAlias System.getenv("KEY_ALIAS")
             keyPassword System.getenv("KEY_PASSWORD")
@@ -48,4 +44,9 @@ android {
             shrinkResources false
         }
     }
+}
+
+dependencies {
+    // یہ لائبریری ایرر کو مستقل فکس کر دے گی
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 }

@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -12,7 +13,10 @@ String currentFiqh = 'shafi';
 
 @pragma('vm:entry-point')
 void playAdhanAlarm() async {
-  // 1. Show Notification First (Guaranteed to fire independently)
+  try {
+    DartPluginRegistrant.ensureInitialized();
+  } catch(_) {}
+  
   try {
     final dynamic notificationsPlugin = FlutterLocalNotificationsPlugin();
     dynamic initSettings;
@@ -21,18 +25,20 @@ void playAdhanAlarm() async {
       initSettings = Function.apply(createInit, [], {#android: const AndroidInitializationSettings('@mipmap/ic_launcher')});
     } catch (_) {}
     await notificationsPlugin.initialize(initSettings);
-    
+
     dynamic androidDetails;
     dynamic createAndroid = AndroidNotificationDetails.new;
     try {
       androidDetails = Function.apply(createAndroid, [], {
-        #channelId: 'azan_channel',
-        #channelName: 'Azan Alarms',
+        #channelId: 'azan_channel_fixed_v9',
+        #channelName: 'Azan Alarms Fixed',
         #importance: Importance.max,
         #priority: Priority.high,
+        #sound: const RawResourceAndroidNotificationSound('azan'),
+        #playSound: true,
       });
     } catch (_) {}
-    
+
     if (androidDetails != null) {
       dynamic createNotifDetails = NotificationDetails.new;
       dynamic notifDetails = Function.apply(createNotifDetails, [], {#android: androidDetails});
@@ -48,12 +54,10 @@ void playAdhanAlarm() async {
     print("Notification Background Error: $e");
   }
 
-  // 2. Play Adhan Audio and keep isolate alive
   final player = AudioPlayer();
   try {
     await player.setAsset('assets/azan.mp3');
     await player.play();
-    // Keep background process alive for 3 minutes to allow complete Adhan playback
     await Future.delayed(const Duration(minutes: 3));
   } catch (e) {
     print("Azan Player Background Error: $e");

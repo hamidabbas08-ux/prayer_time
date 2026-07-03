@@ -22,7 +22,7 @@ void playAdhanAlarm() async {
     dynamic initSettings;
     try {
       dynamic createInit = InitializationSettings.new;
-      initSettings = Function.apply(createInit, [], {#android: const AndroidInitializationSettings('@mipmap/ic_launcher')});
+      initSettings = Function.apply(createInit, [], {#android: const AndroidInitializationSettings('@mipmap/launcher_icon')});
     } catch (_) {}
     await notificationsPlugin.initialize(initSettings);
 

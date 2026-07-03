@@ -182,6 +182,8 @@ class _HomeScreenState extends State<HomeScreen> {
       playAdhanAlarm,
       exact: true,
       wakeup: true,
+      allowWhileIdle: true,
+      alarmClock: true,
     );
   }
 

@@ -27,7 +27,6 @@ android {
 
     signingConfigs {
         create("release") {
-            // کلاؤڈ سیکریٹس اور لوکل دونوں کے لیے الٹرا سیف لاجک
             keyAlias = System.getenv("KEY_ALIAS") ?: "upload"
             storeFile = file("upload-keystore.jks")
             storePassword = System.getenv("KEYSTORE_PASSWORD") ?: System.getenv("STORE_PASSWORD")
@@ -58,5 +57,6 @@ dependencies {
 }
 
 dependencies {
-    add("coreLibraryDesugaring", "com.android.tools:desugar_jdk_libs:2.0.3")
+    // فالٹ فکس: چوہدری صاحب، یہاں ورژن 2.0.3 سے بڑھا کر 2.1.4 کر دیا ہے تاکہ نوٹیفکیشن انجن پاس ہو جائے
+    add("coreLibraryDesugaring", "com.android.tools:desugar_jdk_libs:2.1.4")
 }

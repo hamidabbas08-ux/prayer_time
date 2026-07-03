@@ -27,9 +27,10 @@ android {
 
     signingConfigs {
         create("release") {
-            keyAlias = "upload"
+            // کلاؤڈ سیکریٹس اور لوکل دونوں کے لیے الٹرا سیف لاجک
+            keyAlias = System.getenv("KEY_ALIAS") ?: "upload"
             storeFile = file("upload-keystore.jks")
-            storePassword = System.getenv("STORE_PASSWORD")
+            storePassword = System.getenv("KEYSTORE_PASSWORD") ?: System.getenv("STORE_PASSWORD")
             keyPassword = System.getenv("KEY_PASSWORD")
         }
     }
@@ -43,7 +44,6 @@ android {
     }
 }
 
-// 🌟 دونوں کمپائلرز کا ورژن 1.8 پر برابر لاک کرنے کے لیے
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
@@ -54,10 +54,9 @@ flutter {
     source = "../.."
 }
 
-
 dependencies {
 }
 
 dependencies {
-    add("coreLibraryDesugaring", "com.android.tools:desugar_jdk_libs:2.1.4")
+    add("coreLibraryDesugaring", "com.android.tools:desugar_jdk_libs:2.0.3")
 }

@@ -29,22 +29,22 @@ jobs:
     - name: Build APK for Local Testing
       run: flutter build apk --debug
 
-    # 2. اے پی کے فائل کو کلاؤڈ پر محفوظ کرنا
-    - name: Upload Testing APK to GitHub Artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: PrayerTime-Testing-APK
-        path: build/app/outputs/flutter-apk/app-debug.apk
-
-    # 3. پلے اسٹور کے لیے فائنل AAB بنانا
+    # 2. پلے اسٹور کے لیے فائنل AAB بنانا
     - name: Build App Bundle (AAB)
       run: flutter build appbundle --release
       env:
         KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
 
-    # 4. فائنل AAB فائل کو کلاؤڈ پر محفوظ کرنا
+    # 3. دونوں فائلیں ایک ہی رن کے اندر کلاؤڈ آرٹیکفٹس میں اپلوڈ کرنا
+    - name: Upload Testing APK to GitHub Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: PrayerTime-Testing-APK
+        path: build/app/outputs/flutter-apk/app-debug.apk
+
     - name: Upload App Bundle to GitHub Artifacts
       uses: actions/upload-artifact@v4
       with:

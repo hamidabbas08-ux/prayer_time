@@ -19,7 +19,7 @@ void playAdhanAlarm() async {
   const InitializationSettings initializationSettings =
       InitializationSettings(android: initializationSettingsAndroid);
       
-  await notificationsPlugin.initialize(initializationSettings: initializationSettings);
+  await notificationsPlugin.initialize(settings: initializationSettings);
 
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(

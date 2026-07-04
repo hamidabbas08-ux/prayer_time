@@ -120,7 +120,7 @@ class _PrayerTimeHomeScreenState extends State<PrayerTimeHomeScreen> {
     params.madhab = Madhab.shafi; 
 
     final dateTime = DateTime.now();
-    final prayerTimes = PrayerTimes(coordinates, DateComponents.from(dateTime), params);
+    final prayerTimes = PrayerTimes(coordinates, DateComponents(dateTime.year, dateTime.month, dateTime.day), params);
 
     String formatTime(DateTime time) {
       int hour = time.hour > 12 ? time.hour - 12 : (time.hour == 0 ? 12 : time.hour);
@@ -142,7 +142,7 @@ class _PrayerTimeHomeScreenState extends State<PrayerTimeHomeScreen> {
       isLoading = false;
     });
 
-    _scheduleSystemAlarm(prayerTimes.timeForPrayer(prayerTimes.nextPrayer()) ?? dateTime.add(const Duration(hours: 2)));
+    _scheduleSystemAlarm(prayerTimes.timeForPrayer(prayerTimes.nextPrayer())! ?? dateTime.add(const Duration(hours: 2)));
   }
 
   void _loadFallbackTimes(String statusType) {

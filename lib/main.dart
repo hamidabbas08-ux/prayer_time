@@ -19,7 +19,7 @@ void playAdhanAlarm() async {
   const InitializationSettings initializationSettings =
       InitializationSettings(android: initializationSettingsAndroid);
       
-  await notificationsPlugin.initialize(initialSettings);
+  await notificationsPlugin.initialize(initializationSettings);
 
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
@@ -120,7 +120,7 @@ class _PrayerTimeHomeScreenState extends State<PrayerTimeHomeScreen> {
     params.madhab = Madhab.shafi; 
 
     final dateTime = DateTime.now();
-    final prayerTimes = PrayerTimes(coordinates, dateTime, params);
+    final prayerTimes = PrayerTimes(coordinates, DateComponents.from(dateTime), params);
 
     String formatTime(DateTime time) {
       int hour = time.hour > 12 ? time.hour - 12 : (time.hour == 0 ? 12 : time.hour);
@@ -142,7 +142,7 @@ class _PrayerTimeHomeScreenState extends State<PrayerTimeHomeScreen> {
       isLoading = false;
     });
 
-    _scheduleSystemAlarm(prayerTimes.nextPrayerTime() ?? dateTime.add(const Duration(hours: 2)));
+    _scheduleSystemAlarm(prayerTimes.nextPrayer() ?? dateTime.add(const Duration(hours: 2)));
   }
 
   void _loadFallbackTimes(String statusType) {
@@ -225,7 +225,7 @@ class _PrayerTimeHomeScreenState extends State<PrayerTimeHomeScreen> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.between,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(title, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
             Text(time, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'monospace')),

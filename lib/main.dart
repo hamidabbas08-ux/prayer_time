@@ -142,7 +142,7 @@ class _PrayerTimeHomeScreenState extends State<PrayerTimeHomeScreen> {
       isLoading = false;
     });
 
-    _scheduleSystemAlarm(prayerTimes.nextPrayer() ?? dateTime.add(const Duration(hours: 2)));
+    _scheduleSystemAlarm(prayerTimes.timeForPrayer(prayerTimes.nextPrayer()) ?? dateTime.add(const Duration(hours: 2)));
   }
 
   void _loadFallbackTimes(String statusType) {

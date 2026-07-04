@@ -19,7 +19,7 @@ void playAdhanAlarm() async {
   const InitializationSettings initializationSettings =
       InitializationSettings(android: initializationSettingsAndroid);
       
-  await notificationsPlugin.initialize(initializationSettings);
+  await notificationsPlugin.initialize(initializationSettings: initializationSettings);
 
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
@@ -34,12 +34,7 @@ void playAdhanAlarm() async {
   const NotificationDetails platformChannelSpecifics =
       NotificationDetails(android: androidPlatformChannelSpecifics);
 
-  await notificationsPlugin.show(
-    100,
-    'Prayer Time / وقتِ نماز',
-    'It is time for prayer. Allaho Akbar.',
-    platformChannelSpecifics,
-  );
+  await notificationsPlugin.show(id: 100, title: 'Prayer Time / وقتِ نماز', body: 'It is time for prayer. Allaho Akbar.', notificationDetails: platformChannelSpecifics);
 }
 
 void main() async {
